@@ -9,7 +9,7 @@ defmodule Bbxin do
     import Supervisor.Spec, warn: false
 
     opts = Application.get_env(:bbxin, :start_opts)
-    IO.puts "#{inspect opts}"
+
     children = [
       worker(Bbxin.Client, [opts])
     ]
