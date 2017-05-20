@@ -1,18 +1,23 @@
 defmodule Bbxin do
   @moduledoc """
-  Documentation for Bbxin.
+  Ew.
   """
 
-  @doc """
-  Hello world.
+  use Application
 
-  ## Examples
+  def start(_type, _opts) do
+    import Supervisor.Spec, warn: false
 
-      iex> Bbxin.hello
-      :world
+    opts = Application.get_env(:bbxin, :start_opts)
+    IO.puts "#{inspect opts}"
+    children = [
+      worker(Bbxin.Client, [opts])
+    ]
 
-  """
-  def hello do
-    :world
+    opts = [strategy: :one_for_one, name: Bbxin.Supervisor]
+    Supervisor.start_link(children, opts)
   end
+
+  defdelegate start_link(opts), to: Bbxin.Client
+  defdelegate randquote(server), to: Bbxin.Client
 end
