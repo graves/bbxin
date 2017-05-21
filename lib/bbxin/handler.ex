@@ -7,13 +7,19 @@ defmodule Bbxin.Handler do
 
   alias DiscordEx.RestClient.Resources.Channel
 
+  @username Application.get_env(:bbxin, :username)
+  @names Application.get_env(:bbxin, :names)
+
   # Xintani Handler
   def handle_event({event, payload = %{data: data}}, state) do
     Logger.info "Received Event: #{event}"
     case contains_xintani(data["content"]) do
       true ->
         Logger.info("Talmbout Xin again :(")
-        Channel.send_message(state[:rest_client], payload.data["channel_id"], %{content: Bbxin.randquote(:bbxin) |> HtmlEntities.decode})
+        Channel.send_message(state[:rest_client],
+          payload.data["channel_id"],
+          %{content: Bbxin.randquote(:"#{@username}")
+          |> HtmlEntities.decode})
       _ ->
         Logger.info("Talmbout anything else, ty <3")
     end
@@ -33,7 +39,12 @@ defmodule Bbxin.Handler do
       nil ->
         false
       _ ->
-        Regex.match?(~r/.*xintani.*/i, msg)
+        @names
+        |> Enum.any?(fn(name) -> matches_regex?(name, msg) end)
     end
+  end
+
+  defp matches_regex?(name, msg) do
+    Regex.match?(~r/.*#{name}.*/i, msg)
   end
 end
