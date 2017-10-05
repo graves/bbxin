@@ -28,7 +28,7 @@ The `BBXIN_NAMES` variable should be a comma seperated list of words you wish to
 ```
 git clone https://bitbucket.org/dg4l/bbxin
 cd bbxin
-docker build . bbxin
+docker build . -t bbxin
 docker run -it --rm -e BBXIN_TOKEN="yourDiscordBotToken" \
   -e BBXIN_USERNAME="xintani" \
   -e BBXIN_NAMES="xintani,rapGameMichelleBachmann,queenBeeNiceToDougiePls" \
